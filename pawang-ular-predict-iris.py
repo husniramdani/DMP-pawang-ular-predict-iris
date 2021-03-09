@@ -9,9 +9,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 
-# from load_css import local_css
-# local_css("style.css")
-
 st.write("""
 # Pawang Ular
 """)
@@ -63,16 +60,6 @@ st.write(pred)
 
 st.subheader('Hasil Prediksi Paling banyak')
 st.text(pred['Prediction'].value_counts().index[0])
-
-# t = """
-# <div>
-#     <span class='highlight blue bold'>
-#         Contoh simple css
-#     </span>
-# </div>
-# """
-# st.markdown(t, unsafe_allow_html=True)
-# st.markdown('Streamlit is **_really_ cool**.')
 
 st.text("""
 # ░░░░░░░░░░░░░░░░░░░░░░░

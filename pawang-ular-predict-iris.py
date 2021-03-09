@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import metrics
@@ -10,17 +9,20 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 
+# from load_css import local_css
+# local_css("style.css")
+
 st.write("""
 # Pawang Ular
 """)
 
-st.sidebar.header('User Input Parameters')
+st.sidebar.header('Input Parameters')
 
 def user_input_features():
-    sepal_length = st.sidebar.slider('Sepal length', 4.3, 7.9, 5.4)
-    sepal_width = st.sidebar.slider('Sepal width', 2.0, 4.4, 3.4)
-    petal_length = st.sidebar.slider('Petal length', 1.0, 6.9, 1.3)
-    petal_width = st.sidebar.slider('Petal width', 0.1, 2.5, 0.7)
+    sepal_length = st.sidebar.slider('Sepal length', 4.3, 7.9, 5.0)
+    sepal_width = st.sidebar.slider('Sepal width', 2.0, 4.4, 3.0)
+    petal_length = st.sidebar.slider('Petal length', 1.0, 6.9, 3.0)
+    petal_width = st.sidebar.slider('Petal width', 0.1, 2.5, 1.0)
     data = {'sepal_length': sepal_length,
             'sepal_width': sepal_width,
             'petal_length': petal_length,
@@ -30,15 +32,14 @@ def user_input_features():
 
 df = user_input_features()
 
-st.subheader('User Input parameters')
+st.subheader('input parameters')
 st.write(df)
 
-iris = datasets.load_iris()
-X = iris.data
-Y = iris.target
+dataset = pd.read_csv("./data/iris.csv")
 
-st.subheader('Class labels and their corresponding index number')
-st.write(iris.target_names.reshape(1,3))
+array = dataset.values
+x = array[:,0:4]
+y = array[:,4]
 
 models = []
 pred = []
@@ -52,13 +53,42 @@ models.append(('Logistic Regression', LogisticRegression(solver = 'newton-cg')))
 models.append(('Linear SVC', SVC(kernel='linear')))
 
 for name, model in models:
-    pred.append(iris.target_names[model.fit(X,Y).predict(df)])
+    pred.append(model.fit(x,y).predict(df))
 
 idx = [models[i][0] for i in range(len(models))]
 pred = pd.DataFrame(pred, columns = ['Prediction'], index = idx)
 
-st.subheader('Prediction for each classifier')
+st.subheader('Prediksi untuk tiap klasifikasi')
 st.write(pred)
 
-st.subheader('Prediction from the majority of classifiers')
-st.write(pred['Prediction'].value_counts().index[0])
+st.subheader('Hasil Prediksi Paling banyak')
+st.text(pred['Prediction'].value_counts().index[0])
+
+# t = """
+# <div>
+#     <span class='highlight blue bold'>
+#         Contoh simple css
+#     </span>
+# </div>
+# """
+# st.markdown(t, unsafe_allow_html=True)
+# st.markdown('Streamlit is **_really_ cool**.')
+
+st.text("""
+# ░░░░░░░░░░░░░░░░░░░░░░░
+# ░░░░░▄▀▀▀▄░░░░░░░░░░░░░
+# ▄███▀░◐░░░▌░░░░░░░░░░░░
+# ░░░░▌░░░░░▐░░░░░░░░░░░░
+# ░░░░▐░░░░░▐░░░░░░░░░░░░
+# ░░░░▌░░░░░▐▄▄░░░░░░░░░░
+# ░░░░▌░░░░▄▀▒▒▀▀▀▀▄░░░░░
+# ░░░▐░░░░▐▒▒▒▒▒▒▒▒▀▀▄░░░
+# ░░░▐░░░░▐▄▒▒▒▒▒▒▒▒▒▒▀▄░
+# ░░░░▀▄░░░░▀▄▒▒▒▒▒▒▒▒▒▒▀▄
+# ░░░░░░▀▄▄▄▄▄█▄▄▄▄▄▄▄▄▄▄▄▀▄
+# ░░░░░░░░░░░▌▌░▌▌░░░░░░░
+# ░░░░░░░░░░░▌▌░▌▌░░░░░░░
+# ░░░░░░░░░▄▄▌▌▄▌▌░░░░░░░
+# ░░░░░░PAWANG ULAR░░░░░░░
+# ███████████████████████
+""")

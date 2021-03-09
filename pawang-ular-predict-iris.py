@@ -49,9 +49,12 @@ models.append(('KNN', KNeighborsClassifier(n_neighbors = 3)))
 models.append(('Logistic Regression', LogisticRegression(solver = 'newton-cg')))
 models.append(('Linear SVC', SVC(kernel='linear')))
 
-for name, model in models:
-    pred.append(model.fit(x,y).predict(df))
+@st.cache
+def predictionModel():
+    for name, model in models:
+        pred.append(model.fit(x,y).predict(df))
 
+predictionModel()
 idx = [models[i][0] for i in range(len(models))]
 pred = pd.DataFrame(pred, columns = ['Prediction'], index = idx)
 
